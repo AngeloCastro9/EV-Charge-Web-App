@@ -51,10 +51,10 @@ export default function Home() {
           </p>
         </div>
         <div className="flex gap-4 justify-center">
-          <Button asChild size="lg">
+          <Button size="lg" asChild>
             <Link href="/login">Sign In</Link>
           </Button>
-          <Button asChild variant="outline" size="lg">
+          <Button variant="outline" size="lg" asChild>
             <Link href="/signup">Get Started</Link>
           </Button>
         </div>
