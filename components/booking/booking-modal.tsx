@@ -62,8 +62,8 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
 
   if (!station) return null;
 
-  const estimatedPrice = duration * station.pricePerHour;
-  const estimatedEnergy = (duration * station.power).toFixed(1);
+  const estimatedPrice = duration * (station.pricePerHour ?? 0);
+  const estimatedEnergy = (duration * (station.power ?? 0)).toFixed(1);
 
   const handleBooking = () => {
     if (duration < 1 || duration > 24) {
@@ -113,7 +113,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
             <Label htmlFor="power">Power</Label>
             <Input
               id="power"
-              value={`${station.power} kW`}
+              value={`${station.power ?? 0} kW`}
               disabled
               className="bg-muted"
             />

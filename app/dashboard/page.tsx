@@ -20,7 +20,13 @@ interface ChargingStation {
 
 async function fetchStations(): Promise<ChargingStation[]> {
   const response = await apiClient.get("/stations");
-  return response.data;
+  // Ensure all stations have required properties with defaults
+  return (response.data || []).map((station: any) => ({
+    ...station,
+    power: station.power ?? 0,
+    pricePerHour: station.pricePerHour ?? 0,
+    status: station.status ?? "maintenance",
+  }));
 }
 
 export default function DashboardPage() {
@@ -83,12 +89,14 @@ export default function DashboardPage() {
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-primary" />
-                  <span className="text-2xl font-bold">{station.power} kW</span>
+                  <span className="text-2xl font-bold">
+                    {station.power ?? 0} kW
+                  </span>
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-muted-foreground">Price</p>
                   <p className="text-lg font-semibold">
-                    ${station.pricePerHour.toFixed(2)}/hr
+                    ${(station.pricePerHour ?? 0).toFixed(2)}/hr
                   </p>
                 </div>
               </div>
