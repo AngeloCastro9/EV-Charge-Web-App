@@ -24,8 +24,18 @@ interface Booking {
 }
 
 async function fetchBookings(): Promise<Booking[]> {
-  const response = await apiClient.get("/bookings");
-  return response.data;
+  try {
+    const response = await apiClient.get("/bookings");
+    return response.data || [];
+  } catch (error: any) {
+    // If it's a 401, the interceptor will handle logout
+    // For other errors, return empty array
+    if (error.response?.status === 401) {
+      throw error; // Let the interceptor handle it
+    }
+    // For other errors (network, 500, etc), return empty array
+    return [];
+  }
 }
 
 const statusConfig = {
@@ -36,15 +46,40 @@ const statusConfig = {
 };
 
 export default function BookingsPage() {
-  const { data: bookings, isLoading } = useQuery({
+  const { data: bookings, isLoading, error } = useQuery({
     queryKey: ["bookings"],
     queryFn: fetchBookings,
+    retry: false, // Don't retry on error
   });
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
         <div className="text-muted-foreground">Loading bookings...</div>
+      </div>
+    );
+  }
+
+  // Show error message if there's an error (but don't break the page)
+  if (error && (error as any).response?.status !== 401) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold">My Bookings</h1>
+          <p className="text-muted-foreground mt-2">
+            View and manage your charging sessions
+          </p>
+        </div>
+        <Card className="border-destructive/20 bg-card/50 backdrop-blur-sm">
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <p className="text-lg font-medium text-destructive">
+              Error loading bookings
+            </p>
+            <p className="text-sm text-muted-foreground mt-2">
+              Please try again later
+            </p>
+          </CardContent>
+        </Card>
       </div>
     );
   }
