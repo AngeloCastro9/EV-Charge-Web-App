@@ -10,23 +10,55 @@ import { cn } from "@/lib/utils";
 
 interface Booking {
   id: string;
-  station: {
+  stationId: string;
+  station?: {
     id: string;
     name: string;
     location: string;
     power: number;
   };
-  duration: number;
-  price: number;
+  duration: number; // in hours (converted from durationMinutes)
+  durationMinutes: number;
+  price: number; // mapped from totalPrice
+  totalPrice: number;
   status: "pending" | "active" | "completed" | "cancelled";
   startTime: string;
-  endTime: string;
+  endTime: string | null;
+  powerKw: number;
 }
 
 async function fetchBookings(): Promise<Booking[]> {
   try {
     const response = await apiClient.get("/bookings");
-    return response.data || [];
+    // Map API response to our interface
+    return (response.data || []).map((booking: any) => {
+      // Convert status from uppercase to lowercase
+      const statusMap: Record<string, string> = {
+        PENDING: "pending",
+        ACTIVE: "active",
+        COMPLETED: "completed",
+        CANCELLED: "cancelled",
+      };
+      const status = statusMap[booking.status] || booking.status.toLowerCase();
+      
+      // Convert durationMinutes to hours
+      const duration = booking.durationMinutes ? booking.durationMinutes / 60 : 0;
+      
+      return {
+        id: booking.id,
+        stationId: booking.stationId,
+        duration: duration,
+        durationMinutes: booking.durationMinutes || 0,
+        price: booking.totalPrice || 0,
+        totalPrice: booking.totalPrice || 0,
+        status: status as "pending" | "active" | "completed" | "cancelled",
+        startTime: booking.startTime,
+        endTime: booking.endTime,
+        powerKw: booking.powerKw || 0,
+        // Note: API doesn't return station object, we'll need to fetch it separately if needed
+        // For now, we'll use stationId to display
+      };
+    });
   } catch (error: any) {
     // If it's a 401, the interceptor will handle logout
     // For other errors, return empty array
@@ -121,7 +153,7 @@ export default function BookingsPage() {
           const statusInfo = statusConfig[booking.status];
           const isActive = booking.status === "active";
           const startDate = new Date(booking.startTime);
-          const endDate = new Date(booking.endTime);
+          const endDate = booking.endTime ? new Date(booking.endTime) : null;
 
           return (
             <motion.div
@@ -140,7 +172,7 @@ export default function BookingsPage() {
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="text-xl flex items-center gap-2">
-                        {booking.station.name}
+                        {booking.station?.name || `Station ${booking.stationId.slice(0, 8)}`}
                         {isActive && (
                           <motion.div
                             animate={{
@@ -158,7 +190,7 @@ export default function BookingsPage() {
                       </CardTitle>
                       <CardDescription className="flex items-center gap-2 mt-2">
                         <MapPin className="h-4 w-4" />
-                        {booking.station.location}
+                        {booking.station?.location || "Location not available"}
                       </CardDescription>
                     </div>
                     <Badge variant={statusInfo.variant}>
@@ -174,7 +206,7 @@ export default function BookingsPage() {
                         <span>Power</span>
                       </div>
                       <p className="text-lg font-semibold">
-                        {booking.station.power} kW
+                        {booking.powerKw || booking.station?.power || 0} kW
                       </p>
                     </div>
                     <div className="space-y-1">
@@ -234,11 +266,12 @@ export default function BookingsPage() {
                             Charging in progress
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            Session ends at{" "}
-                            {endDate.toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
+                            {endDate 
+                              ? `Session ends at ${endDate.toLocaleTimeString([], {
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                })}`
+                              : "Session in progress"}
                           </p>
                         </div>
                       </div>

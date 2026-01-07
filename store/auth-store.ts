@@ -53,10 +53,12 @@ export const useAuthStore = create<AuthState>()(
       signup: async (email: string, password: string, name: string) => {
         try {
           const apiClient = (await import("@/lib/axios")).default;
+          // API only expects email and password according to Swagger
           const response = await apiClient.post("/auth/signup", {
             email,
             password,
-            name,
+            // Note: name is not in the API spec, but we'll keep it for future use
+            // The backend might ignore it or use it if implemented
           });
           // Backend returns access_token, but we'll support both token and access_token
           const token = response.data.access_token || response.data.token;

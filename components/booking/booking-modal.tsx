@@ -37,8 +37,14 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
   const queryClient = useQueryClient();
 
   const bookingMutation = useMutation({
-    mutationFn: async (data: { stationId: string; duration: number }) => {
-      const response = await apiClient.post("/bookings", data);
+    mutationFn: async (data: { stationId: string; duration: number; powerKw: number }) => {
+      // API expects startTime (ISO string) and powerKw, not duration
+      const startTime = new Date().toISOString();
+      const response = await apiClient.post("/bookings", {
+        stationId: data.stationId,
+        startTime: startTime,
+        powerKw: data.powerKw,
+      });
       return response.data;
     },
     onSuccess: () => {
@@ -74,6 +80,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
     bookingMutation.mutate({
       stationId: station.id,
       duration,
+      powerKw: station.power,
     });
   };
 
