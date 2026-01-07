@@ -16,7 +16,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/AngeloCastro9/EV-Charge-Web-App/issues"
   },
@@ -37,8 +36,10 @@
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
   }
 }
