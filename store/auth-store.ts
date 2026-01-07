@@ -30,14 +30,15 @@ export const useAuthStore = create<AuthState>()(
             password,
           });
           const { user, token } = response.data;
+          // Sync both Zustand and localStorage
+          if (typeof window !== "undefined") {
+            localStorage.setItem("token", token);
+          }
           set({
             user,
             token,
             isAuthenticated: true,
           });
-          if (typeof window !== "undefined") {
-            localStorage.setItem("token", token);
-          }
         } catch (error: any) {
           throw new Error(error.response?.data?.message || "Login failed");
         }
@@ -51,14 +52,15 @@ export const useAuthStore = create<AuthState>()(
             name,
           });
           const { user, token } = response.data;
+          // Sync both Zustand and localStorage
+          if (typeof window !== "undefined") {
+            localStorage.setItem("token", token);
+          }
           set({
             user,
             token,
             isAuthenticated: true,
           });
-          if (typeof window !== "undefined") {
-            localStorage.setItem("token", token);
-          }
         } catch (error: any) {
           throw new Error(error.response?.data?.message || "Signup failed");
         }
