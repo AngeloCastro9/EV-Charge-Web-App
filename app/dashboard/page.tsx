@@ -20,13 +20,27 @@ interface ChargingStation {
 
 async function fetchStations(): Promise<ChargingStation[]> {
   const response = await apiClient.get("/stations");
-  // Ensure all stations have required properties with defaults
-  return (response.data || []).map((station: any) => ({
-    ...station,
-    power: station.power ?? 0,
-    pricePerHour: station.pricePerHour ?? 0,
-    status: station.status ?? "maintenance",
-  }));
+  // Map API response to our interface
+  return (response.data || []).map((station: any) => {
+    // Calculate price per hour based on power (e.g., $0.50 per kW per hour)
+    const basePricePerKw = 0.5;
+    const powerKw = station.powerKw ?? 0;
+    const pricePerHour = powerKw * basePricePerKw;
+    
+    // Map isAvailable boolean to status string
+    const status = station.isAvailable 
+      ? "available" 
+      : "occupied"; // If not available, consider it occupied
+    
+    return {
+      id: station.id,
+      name: station.name,
+      power: powerKw,
+      location: station.location,
+      status: status,
+      pricePerHour: pricePerHour,
+    };
+  });
 }
 
 export default function DashboardPage() {
