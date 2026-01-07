@@ -29,18 +29,25 @@ export const useAuthStore = create<AuthState>()(
             email,
             password,
           });
-          const { user, token } = response.data;
+          // Backend returns access_token, but we'll support both token and access_token
+          const token = response.data.access_token || response.data.token;
+          const user = response.data.user || response.data;
+          
+          if (!token) {
+            throw new Error("No token received from server");
+          }
+          
           // Sync both Zustand and localStorage
           if (typeof window !== "undefined") {
             localStorage.setItem("token", token);
           }
           set({
-            user,
+            user: user ? { id: user.id, email: user.email, name: user.name } : null,
             token,
             isAuthenticated: true,
           });
         } catch (error: any) {
-          throw new Error(error.response?.data?.message || "Login failed");
+          throw new Error(error.response?.data?.message || error.message || "Login failed");
         }
       },
       signup: async (email: string, password: string, name: string) => {
@@ -51,18 +58,25 @@ export const useAuthStore = create<AuthState>()(
             password,
             name,
           });
-          const { user, token } = response.data;
+          // Backend returns access_token, but we'll support both token and access_token
+          const token = response.data.access_token || response.data.token;
+          const user = response.data.user || response.data;
+          
+          if (!token) {
+            throw new Error("No token received from server");
+          }
+          
           // Sync both Zustand and localStorage
           if (typeof window !== "undefined") {
             localStorage.setItem("token", token);
           }
           set({
-            user,
+            user: user ? { id: user.id, email: user.email, name: user.name } : null,
             token,
             isAuthenticated: true,
           });
         } catch (error: any) {
-          throw new Error(error.response?.data?.message || "Signup failed");
+          throw new Error(error.response?.data?.message || error.message || "Signup failed");
         }
       },
       logout: () => {
@@ -78,6 +92,11 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: "auth-storage",
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
+      }),
     }
   )
 );
