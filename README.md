@@ -225,10 +225,6 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 📄 License
-
-ISC
-
 ## 👤 Author
 
 Angelo Castro
