@@ -1,13 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/store/auth-store";
 import { Bell, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { LanguageSelector } from "@/components/language-selector";
 
 export function Topbar() {
   const [mounted, setMounted] = useState(false);
   const user = useAuthStore((state) => state.user);
+  const t = useTranslations("layout.topbar");
 
   useEffect(() => {
     setMounted(true);
@@ -20,19 +23,20 @@ export function Topbar() {
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search stations..."
+            placeholder={t("searchPlaceholder")}
             className="pl-10"
           />
         </div>
       </div>
       <div className="flex items-center gap-4">
+        <LanguageSelector />
         <button className="relative rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
           <Bell className="h-5 w-5" />
           <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-primary"></span>
         </button>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <p className="text-sm font-medium">{mounted && user?.name ? user.name : "User"}</p>
+            <p className="text-sm font-medium">{mounted && user?.name ? user.name : t("user")}</p>
             <p className="text-xs text-muted-foreground">{mounted && user?.email ? user.email : ""}</p>
           </div>
           <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">

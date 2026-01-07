@@ -1,25 +1,29 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { LayoutDashboard, Zap, Calendar, LogOut } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
 import { useRouter } from "next/navigation";
 
-const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "My Bookings", href: "/dashboard/bookings", icon: Calendar },
-];
-
 export function Sidebar() {
   const pathname = usePathname();
+  const params = useParams();
+  const locale = params.locale as string || "en";
   const router = useRouter();
   const logout = useAuthStore((state) => state.logout);
+  const t = useTranslations("layout.sidebar");
+
+  const navigation = [
+    { name: t("dashboard"), href: `/${locale}/dashboard`, icon: LayoutDashboard },
+    { name: t("myBookings"), href: `/${locale}/dashboard/bookings`, icon: Calendar },
+  ];
 
   const handleLogout = () => {
     logout();
-    router.push("/login");
+    router.push(`/${locale}/login`);
   };
 
   return (
@@ -59,7 +63,7 @@ export function Sidebar() {
           className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
         >
           <LogOut className="h-5 w-5" />
-          Logout
+          {t("logout")}
         </button>
       </div>
     </div>

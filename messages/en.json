@@ -1,0 +1,110 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "logout": "Logout"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "description": "Sign in to your EV Charge Manager account",
+      "email": "Email",
+      "password": "Password",
+      "signIn": "Sign In",
+      "signingIn": "Signing in...",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "failed": "Failed to login"
+    },
+    "signup": {
+      "title": "Create Account",
+      "description": "Get started with EV Charge Manager",
+      "name": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "signUp": "Sign Up",
+      "creating": "Creating account...",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "failed": "Failed to sign up"
+    }
+  },
+  "dashboard": {
+    "title": "Charging Stations",
+    "subtitle": "Find and book available charging stations",
+    "loadingStations": "Loading stations...",
+    "bookNow": "Book Now",
+    "price": "Price",
+    "power": "Power",
+    "location": "Location",
+    "status": {
+      "available": "available",
+      "occupied": "occupied",
+      "maintenance": "maintenance"
+    }
+  },
+  "booking": {
+    "modal": {
+      "title": "Book Charging Station",
+      "description": "Reserve {name} for your charging session",
+      "station": "Station",
+      "power": "Power",
+      "location": "Location",
+      "duration": "Duration (hours)",
+      "durationHint": "Minimum: 1 hour | Maximum: 24 hours",
+      "estimatedPrice": "Estimated Price",
+      "estimatedEnergy": "Estimated Energy",
+      "durationLabel": "Duration",
+      "confirmBooking": "Confirm Booking",
+      "booking": "Booking...",
+      "error": "Failed to create booking",
+      "durationError": "Duration must be between 1 and 24 hours"
+    }
+  },
+  "bookings": {
+    "title": "My Bookings",
+    "subtitle": "View and manage your charging sessions",
+    "loading": "Loading bookings...",
+    "noBookings": "No bookings yet",
+    "noBookingsDescription": "Book a charging station to get started",
+    "errorLoading": "Error loading bookings",
+    "tryAgain": "Please try again later",
+    "power": "Power",
+    "duration": "Duration",
+    "startTime": "Start Time",
+    "totalPrice": "Total Price",
+    "chargingInProgress": "Charging in progress",
+    "sessionEndsAt": "Session ends at",
+    "sessionInProgress": "Session in progress",
+    "status": {
+      "pending": "Pending",
+      "active": "Charging",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    }
+  },
+  "layout": {
+    "sidebar": {
+      "dashboard": "Dashboard",
+      "myBookings": "My Bookings",
+      "logout": "Logout"
+    },
+    "topbar": {
+      "searchPlaceholder": "Search stations...",
+      "user": "User"
+    }
+  },
+  "home": {
+    "title": "EV Charge Manager",
+    "subtitle": "High-end dashboard for EV charging management",
+    "signIn": "Sign In",
+    "getStarted": "Get Started"
+  }
+}
+

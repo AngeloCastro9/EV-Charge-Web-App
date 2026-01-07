@@ -1,0 +1,110 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "save": "Salvar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "search": "Buscar",
+    "logout": "Sair"
+  },
+  "auth": {
+    "login": {
+      "title": "Bem-vindo de volta",
+      "description": "Entre na sua conta EV Charge Manager",
+      "email": "Email",
+      "password": "Senha",
+      "signIn": "Entrar",
+      "signingIn": "Entrando...",
+      "noAccount": "Não tem uma conta?",
+      "signUp": "Cadastre-se",
+      "failed": "Falha ao fazer login"
+    },
+    "signup": {
+      "title": "Criar Conta",
+      "description": "Comece com o EV Charge Manager",
+      "name": "Nome Completo",
+      "email": "Email",
+      "password": "Senha",
+      "signUp": "Cadastrar",
+      "creating": "Criando conta...",
+      "hasAccount": "Já tem uma conta?",
+      "signIn": "Entrar",
+      "failed": "Falha ao cadastrar"
+    }
+  },
+  "dashboard": {
+    "title": "Estações de Carregamento",
+    "subtitle": "Encontre e reserve estações de carregamento disponíveis",
+    "loadingStations": "Carregando estações...",
+    "bookNow": "Reservar Agora",
+    "price": "Preço",
+    "power": "Potência",
+    "location": "Localização",
+    "status": {
+      "available": "disponível",
+      "occupied": "ocupada",
+      "maintenance": "manutenção"
+    }
+  },
+  "booking": {
+    "modal": {
+      "title": "Reservar Estação de Carregamento",
+      "description": "Reserve {name} para sua sessão de carregamento",
+      "station": "Estação",
+      "power": "Potência",
+      "location": "Localização",
+      "duration": "Duração (horas)",
+      "durationHint": "Mínimo: 1 hora | Máximo: 24 horas",
+      "estimatedPrice": "Preço Estimado",
+      "estimatedEnergy": "Energia Estimada",
+      "durationLabel": "Duração",
+      "confirmBooking": "Confirmar Reserva",
+      "booking": "Reservando...",
+      "error": "Falha ao criar reserva",
+      "durationError": "A duração deve estar entre 1 e 24 horas"
+    }
+  },
+  "bookings": {
+    "title": "Minhas Reservas",
+    "subtitle": "Visualize e gerencie suas sessões de carregamento",
+    "loading": "Carregando reservas...",
+    "noBookings": "Nenhuma reserva ainda",
+    "noBookingsDescription": "Reserve uma estação de carregamento para começar",
+    "errorLoading": "Erro ao carregar reservas",
+    "tryAgain": "Por favor, tente novamente mais tarde",
+    "power": "Potência",
+    "duration": "Duração",
+    "startTime": "Horário de Início",
+    "totalPrice": "Preço Total",
+    "chargingInProgress": "Carregamento em andamento",
+    "sessionEndsAt": "Sessão termina às",
+    "sessionInProgress": "Sessão em andamento",
+    "status": {
+      "pending": "Pendente",
+      "active": "Carregando",
+      "completed": "Concluída",
+      "cancelled": "Cancelada"
+    }
+  },
+  "layout": {
+    "sidebar": {
+      "dashboard": "Painel",
+      "myBookings": "Minhas Reservas",
+      "logout": "Sair"
+    },
+    "topbar": {
+      "searchPlaceholder": "Buscar estações...",
+      "user": "Usuário"
+    }
+  },
+  "home": {
+    "title": "EV Charge Manager",
+    "subtitle": "Painel de alta qualidade para gerenciamento de carregamento de veículos elétricos",
+    "signIn": "Entrar",
+    "getStarted": "Começar"
+  }
+}
+
