@@ -2,35 +2,28 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
+  const response = NextResponse.next();
   
-  // Check if pathname already has a locale
-  const pathnameHasLocale = /^\/(en|pt)(\/|$)/.test(pathname);
+  // Set locale cookie if not present
+  const locale = request.cookies.get("locale")?.value;
   
-  if (!pathnameHasLocale) {
-    // Get locale from cookie, Accept-Language header, or default to 'pt'
-    let locale = request.cookies.get("locale")?.value;
+  if (!locale) {
+    // Get locale from Accept-Language header or default to 'pt'
+    const acceptLanguage = request.headers.get("accept-language");
+    let detectedLocale = "pt";
     
-    // If no cookie, try Accept-Language header
-    if (!locale) {
-      const acceptLanguage = request.headers.get("accept-language");
-      if (acceptLanguage?.includes("pt")) {
-        locale = "pt";
-      } else if (acceptLanguage?.includes("en")) {
-        locale = "en";
-      }
+    if (acceptLanguage?.includes("en")) {
+      detectedLocale = "en";
     }
     
-    // Default to Portuguese
-    locale = locale || "pt";
-    
-    // Redirect to locale path
-    return NextResponse.redirect(
-      new URL(`/${locale}${pathname === "/" ? "" : pathname}`, request.url)
-    );
+    // Set cookie
+    response.cookies.set("locale", detectedLocale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    });
   }
   
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

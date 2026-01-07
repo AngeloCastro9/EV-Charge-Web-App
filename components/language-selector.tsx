@@ -1,8 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 const languages = [
@@ -12,15 +11,15 @@ const languages = [
 
 export function LanguageSelector() {
   const locale = useLocale();
-  const pathname = usePathname();
+  const router = useRouter();
 
   const changeLanguage = (newLocale: string) => {
     // Set cookie
     document.cookie = `locale=${newLocale}; path=/; max-age=31536000`;
     
-    // Replace locale in pathname
-    const newPathname = pathname.replace(`/${locale}`, `/${newLocale}`) || `/${newLocale}`;
-    window.location.href = newPathname;
+    // Reload page to apply new locale (URL stays the same)
+    router.refresh();
+    window.location.reload();
   };
 
   return (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useAuthStore } from "@/store/auth-store";
 import { Button } from "@/components/ui/button";
 import { Zap } from "lucide-react";
@@ -12,6 +13,7 @@ export default function Home() {
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const t = useTranslations("home");
 
   useEffect(() => {
     setMounted(true);
@@ -49,18 +51,18 @@ export default function Home() {
         </div>
         <div className="space-y-4">
           <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            EV Charge Manager
+            {t("title")}
           </h1>
           <p className="text-xl text-muted-foreground">
-            High-end dashboard for EV charging management
+            {t("subtitle")}
           </p>
         </div>
         <div className="flex gap-4 justify-center">
           <Button size="lg" asChild>
-            <Link href="/login">Sign In</Link>
+            <Link href="/login">{t("signIn")}</Link>
           </Button>
           <Button variant="outline" size="lg" asChild>
-            <Link href="/signup">Get Started</Link>
+            <Link href="/signup">{t("getStarted")}</Link>
           </Button>
         </div>
       </motion.div>
