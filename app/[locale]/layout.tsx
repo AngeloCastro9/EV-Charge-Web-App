@@ -8,7 +8,7 @@ import { Providers } from "../providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const locales = ["en", "pt"];
+const locales = ["pt", "en"]; // Portuguese first as default
 
 export const metadata: Metadata = {
   title: "EV Charge Manager",

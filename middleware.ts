@@ -8,8 +8,21 @@ export function middleware(request: NextRequest) {
   const pathnameHasLocale = /^\/(en|pt)(\/|$)/.test(pathname);
   
   if (!pathnameHasLocale) {
-    // Get locale from cookie or default to 'en'
-    const locale = request.cookies.get("locale")?.value || "en";
+    // Get locale from cookie, Accept-Language header, or default to 'pt'
+    let locale = request.cookies.get("locale")?.value;
+    
+    // If no cookie, try Accept-Language header
+    if (!locale) {
+      const acceptLanguage = request.headers.get("accept-language");
+      if (acceptLanguage?.includes("pt")) {
+        locale = "pt";
+      } else if (acceptLanguage?.includes("en")) {
+        locale = "en";
+      }
+    }
+    
+    // Default to Portuguese
+    locale = locale || "pt";
     
     // Redirect to locale path
     return NextResponse.redirect(

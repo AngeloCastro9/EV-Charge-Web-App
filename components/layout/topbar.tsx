@@ -28,7 +28,7 @@ export function Topbar() {
           />
         </div>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3">
         <LanguageSelector />
         <button className="relative rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground">
           <Bell className="h-5 w-5" />

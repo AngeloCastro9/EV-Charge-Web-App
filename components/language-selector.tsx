@@ -1,28 +1,18 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Globe } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 const languages = [
-  { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "pt", name: "Português", flag: "🇧🇷" },
+  { code: "en", name: "EN", label: "English" },
+  { code: "pt", name: "PT", label: "Português" },
 ];
 
 export function LanguageSelector() {
   const locale = useLocale();
-  const router = useRouter();
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
 
   const changeLanguage = (newLocale: string) => {
     // Set cookie
@@ -33,49 +23,24 @@ export function LanguageSelector() {
     window.location.href = newPathname;
   };
 
-  const currentLanguage = languages.find((lang) => lang.code === locale) || languages[0];
-
   return (
-    <>
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={() => setOpen(true)}
-        className="relative"
-      >
-        <Globe className="h-5 w-5" />
-      </Button>
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-[300px]">
-          <DialogHeader>
-            <DialogTitle>Select Language</DialogTitle>
-            <DialogDescription>Choose your preferred language</DialogDescription>
-          </DialogHeader>
-          <div className="space-y-2 py-4">
-            {languages.map((lang) => (
-              <button
-                key={lang.code}
-                onClick={() => {
-                  changeLanguage(lang.code);
-                  setOpen(false);
-                }}
-                className={`w-full flex items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors ${
-                  locale === lang.code
-                    ? "bg-primary/10 text-primary"
-                    : "hover:bg-accent hover:text-accent-foreground"
-                }`}
-              >
-                <span className="text-2xl">{lang.flag}</span>
-                <span className="font-medium">{lang.name}</span>
-                {locale === lang.code && (
-                  <span className="ml-auto text-xs text-primary">✓</span>
-                )}
-              </button>
-            ))}
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+    <div className="flex items-center gap-1 rounded-lg border border-border bg-card/50 p-1">
+      {languages.map((lang) => (
+        <button
+          key={lang.code}
+          onClick={() => changeLanguage(lang.code)}
+          className={cn(
+            "px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200",
+            locale === lang.code
+              ? "bg-primary text-primary-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+          )}
+          title={lang.label}
+        >
+          {lang.name}
+        </button>
+      ))}
+    </div>
   );
 }
 
