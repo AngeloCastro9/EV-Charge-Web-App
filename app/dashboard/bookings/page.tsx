@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import apiClient from "@/lib/axios";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -70,24 +71,25 @@ async function fetchBookings(): Promise<Booking[]> {
   }
 }
 
-const statusConfig = {
-  pending: { label: "Pending", variant: "secondary" as const, color: "text-yellow-400" },
-  active: { label: "Charging", variant: "default" as const, color: "text-primary" },
-  completed: { label: "Completed", variant: "outline" as const, color: "text-green-400" },
-  cancelled: { label: "Cancelled", variant: "destructive" as const, color: "text-destructive" },
-};
-
 export default function BookingsPage() {
+  const t = useTranslations("bookings");
   const { data: bookings, isLoading, error } = useQuery({
     queryKey: ["bookings"],
     queryFn: fetchBookings,
     retry: false, // Don't retry on error
   });
 
+  const statusConfig = {
+    pending: { label: t("status.pending"), variant: "secondary" as const, color: "text-yellow-400" },
+    active: { label: t("status.active"), variant: "default" as const, color: "text-primary" },
+    completed: { label: t("status.completed"), variant: "outline" as const, color: "text-green-400" },
+    cancelled: { label: t("status.cancelled"), variant: "destructive" as const, color: "text-destructive" },
+  };
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-muted-foreground">Loading bookings...</div>
+        <div className="text-muted-foreground">{t("loading")}</div>
       </div>
     );
   }
@@ -97,18 +99,18 @@ export default function BookingsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">My Bookings</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground mt-2">
-            View and manage your charging sessions
+            {t("subtitle")}
           </p>
         </div>
         <Card className="border-destructive/20 bg-card/50 backdrop-blur-sm">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <p className="text-lg font-medium text-destructive">
-              Error loading bookings
+              {t("errorLoading")}
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Please try again later
+              {t("tryAgain")}
             </p>
           </CardContent>
         </Card>
@@ -120,19 +122,19 @@ export default function BookingsPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">My Bookings</h1>
+          <h1 className="text-3xl font-bold">{t("title")}</h1>
           <p className="text-muted-foreground mt-2">
-            View and manage your charging sessions
+            {t("subtitle")}
           </p>
         </div>
         <Card className="border-primary/20 bg-card/50 backdrop-blur-sm">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Calendar className="h-12 w-12 text-muted-foreground mb-4" />
             <p className="text-lg font-medium text-muted-foreground">
-              No bookings yet
+              {t("noBookings")}
             </p>
             <p className="text-sm text-muted-foreground mt-2">
-              Book a charging station to get started
+              {t("noBookingsDescription")}
             </p>
           </CardContent>
         </Card>
@@ -143,9 +145,9 @@ export default function BookingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">My Bookings</h1>
+        <h1 className="text-3xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground mt-2">
-          View and manage your charging sessions
+          {t("subtitle")}
         </p>
       </div>
       <div className="grid grid-cols-1 gap-6">
@@ -203,7 +205,7 @@ export default function BookingsPage() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Zap className="h-4 w-4" />
-                        <span>Power</span>
+                        <span>{t("power")}</span>
                       </div>
                       <p className="text-lg font-semibold">
                         {booking.powerKw || booking.station?.power || 0} kW
@@ -212,16 +214,16 @@ export default function BookingsPage() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Clock className="h-4 w-4" />
-                        <span>Duration</span>
+                        <span>{t("duration")}</span>
                       </div>
                       <p className="text-lg font-semibold">
-                        {booking.duration} {booking.duration === 1 ? "hr" : "hrs"}
+                        {booking.duration} {booking.duration === 1 ? "h" : "h"}
                       </p>
                     </div>
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Calendar className="h-4 w-4" />
-                        <span>Start Time</span>
+                        <span>{t("startTime")}</span>
                       </div>
                       <p className="text-sm font-semibold">
                         {startDate.toLocaleDateString()}
@@ -236,7 +238,7 @@ export default function BookingsPage() {
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
                         <DollarSign className="h-4 w-4" />
-                        <span>Total Price</span>
+                        <span>{t("totalPrice")}</span>
                       </div>
                       <p className="text-lg font-bold text-primary">
                         ${booking.price.toFixed(2)}
@@ -263,15 +265,15 @@ export default function BookingsPage() {
                         />
                         <div>
                           <p className="text-sm font-medium text-primary">
-                            Charging in progress
+                            {t("chargingInProgress")}
                           </p>
                           <p className="text-xs text-muted-foreground">
                             {endDate 
-                              ? `Session ends at ${endDate.toLocaleTimeString([], {
+                              ? `${t("sessionEndsAt")} ${endDate.toLocaleTimeString([], {
                                   hour: "2-digit",
                                   minute: "2-digit",
                                 })}`
-                              : "Session in progress"}
+                              : t("sessionInProgress")}
                           </p>
                         </div>
                       </div>

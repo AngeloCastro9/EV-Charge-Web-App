@@ -64,7 +64,9 @@
       "confirmBooking": "Confirm Booking",
       "booking": "Booking...",
       "error": "Failed to create booking",
-      "durationError": "Duration must be between 1 and 24 hours"
+      "durationError": "Duration must be between 1 and 24 hours",
+      "hour": "hour",
+      "hours": "hours"
     }
   },
   "bookings": {

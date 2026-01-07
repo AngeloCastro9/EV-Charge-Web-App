@@ -64,7 +64,9 @@
       "confirmBooking": "Confirmar Reserva",
       "booking": "Reservando...",
       "error": "Falha ao criar reserva",
-      "durationError": "A duração deve estar entre 1 e 24 horas"
+      "durationError": "A duração deve estar entre 1 e 24 horas",
+      "hour": "hora",
+      "hours": "horas"
     }
   },
   "bookings": {

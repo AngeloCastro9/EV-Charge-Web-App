@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Dialog,
@@ -35,6 +36,8 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
   const [duration, setDuration] = useState(1);
   const [error, setError] = useState("");
   const queryClient = useQueryClient();
+  const t = useTranslations("booking.modal");
+  const tCommon = useTranslations("common");
 
   const bookingMutation = useMutation({
     mutationFn: async (data: { stationId: string; duration: number; powerKw: number }) => {
@@ -55,7 +58,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
       setError("");
     },
     onError: (err: any) => {
-      setError(err.response?.data?.message || "Failed to create booking");
+      setError(err.response?.data?.message || t("error"));
     },
   });
 
@@ -73,7 +76,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
 
   const handleBooking = () => {
     if (duration < 1 || duration > 24) {
-      setError("Duration must be between 1 and 24 hours");
+      setError(t("durationError"));
       return;
     }
     setError("");
@@ -100,15 +103,15 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-primary" />
-            Book Charging Station
+            {t("title")}
           </DialogTitle>
           <DialogDescription>
-            Reserve {station.name} for your charging session
+            {t("description", { name: station.name })}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
           <div className="space-y-2">
-            <Label htmlFor="station-name">Station</Label>
+            <Label htmlFor="station-name">{t("station")}</Label>
             <Input
               id="station-name"
               value={station.name}
@@ -117,7 +120,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="power">Power</Label>
+            <Label htmlFor="power">{t("power")}</Label>
             <Input
               id="power"
               value={`${station.power ?? 0} kW`}
@@ -126,7 +129,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="location">Location</Label>
+            <Label htmlFor="location">{t("location")}</Label>
             <Input
               id="location"
               value={station.location}
@@ -135,7 +138,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="duration">Duration (hours)</Label>
+            <Label htmlFor="duration">{t("duration")}</Label>
             <Input
               id="duration"
               type="number"
@@ -147,7 +150,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
               placeholder="Enter duration"
             />
             <p className="text-xs text-muted-foreground">
-              Minimum: 1 hour | Maximum: 24 hours
+              {t("durationHint")}
             </p>
           </div>
           {error && (
@@ -171,16 +174,16 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                     <Clock className="h-4 w-4" />
-                    <span>Duration</span>
+                    <span>{t("durationLabel")}</span>
                   </div>
                   <span className="text-sm font-semibold">
-                    {duration} {duration === 1 ? "hour" : "hours"}
+                    {duration} {duration === 1 ? t("hour") : t("hours")}
                   </span>
                 </div>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                     <Zap className="h-4 w-4" />
-                    <span>Estimated Energy</span>
+                    <span>{t("estimatedEnergy")}</span>
                   </div>
                   <span className="text-sm font-semibold">
                     {estimatedEnergy} kWh
@@ -189,7 +192,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
                 <div className="flex items-center justify-between border-t border-primary/20 pt-3">
                   <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                     <DollarSign className="h-4 w-4" />
-                    <span>Estimated Price</span>
+                    <span>{t("estimatedPrice")}</span>
                   </div>
                   <motion.span
                     key={estimatedPrice}
@@ -210,7 +213,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
               onClick={() => onOpenChange(false)}
               disabled={bookingMutation.isPending}
             >
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               className="flex-1"
@@ -222,7 +225,7 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
                 duration > 24
               }
             >
-              {bookingMutation.isPending ? "Booking..." : "Confirm Booking"}
+              {bookingMutation.isPending ? t("booking") : t("confirmBooking")}
             </Button>
           </div>
         </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useTranslations } from "next-intl";
 import apiClient from "@/lib/axios";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,6 +47,7 @@ async function fetchStations(): Promise<ChargingStation[]> {
 export default function DashboardPage() {
   const [selectedStation, setSelectedStation] = useState<ChargingStation | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const t = useTranslations("dashboard");
 
   const { data: stations, isLoading } = useQuery({
     queryKey: ["stations"],
@@ -60,7 +62,7 @@ export default function DashboardPage() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className="text-muted-foreground">Loading stations...</div>
+        <div className="text-muted-foreground">{t("loadingStations")}</div>
       </div>
     );
   }
@@ -68,9 +70,9 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold">Charging Stations</h1>
+        <h1 className="text-3xl font-bold">{t("title")}</h1>
         <p className="text-muted-foreground mt-2">
-          Find and book available charging stations
+          {t("subtitle")}
         </p>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -91,7 +93,7 @@ export default function DashboardPage() {
                       : "destructive"
                   }
                 >
-                  {station.status}
+                  {t(`status.${station.status}`)}
                 </Badge>
               </div>
               <CardDescription className="flex items-center gap-2 mt-2">
@@ -108,7 +110,7 @@ export default function DashboardPage() {
                   </span>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-muted-foreground">Price</p>
+                  <p className="text-sm text-muted-foreground">{t("price")}</p>
                   <p className="text-lg font-semibold">
                     ${(station.pricePerHour ?? 0).toFixed(2)}/hr
                   </p>
@@ -119,7 +121,7 @@ export default function DashboardPage() {
                 disabled={station.status !== "available"}
                 onClick={() => handleBookNow(station)}
               >
-                Book Now
+                {t("bookNow")}
               </Button>
             </CardContent>
           </Card>
