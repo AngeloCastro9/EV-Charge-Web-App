@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import apiClient from "@/lib/axios";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Zap, MapPin } from "lucide-react";
+import { BookingModal } from "@/components/booking/booking-modal";
 
 interface ChargingStation {
   id: string;
@@ -22,10 +24,18 @@ async function fetchStations(): Promise<ChargingStation[]> {
 }
 
 export default function DashboardPage() {
+  const [selectedStation, setSelectedStation] = useState<ChargingStation | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   const { data: stations, isLoading } = useQuery({
     queryKey: ["stations"],
     queryFn: fetchStations,
   });
+
+  const handleBookNow = (station: ChargingStation) => {
+    setSelectedStation(station);
+    setIsModalOpen(true);
+  };
 
   if (isLoading) {
     return (
@@ -85,6 +95,7 @@ export default function DashboardPage() {
               <Button
                 className="w-full"
                 disabled={station.status !== "available"}
+                onClick={() => handleBookNow(station)}
               >
                 Book Now
               </Button>
@@ -92,6 +103,11 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+      <BookingModal
+        open={isModalOpen}
+        onOpenChange={setIsModalOpen}
+        station={selectedStation}
+      />
     </div>
   );
 }
