@@ -18,9 +18,9 @@ interface Booking {
     location: string;
     power: number;
   };
-  duration: number; // in hours (converted from durationMinutes)
+  duration: number;
   durationMinutes: number;
-  price: number; // mapped from totalPrice
+  price: number;
   totalPrice: number;
   status: "pending" | "active" | "completed" | "cancelled";
   startTime: string;
@@ -31,9 +31,7 @@ interface Booking {
 async function fetchBookings(): Promise<Booking[]> {
   try {
     const response = await apiClient.get("/bookings");
-    // Map API response to our interface
     return (response.data || []).map((booking: any) => {
-      // Convert status from uppercase to lowercase
       const statusMap: Record<string, string> = {
         PENDING: "pending",
         ACTIVE: "active",
@@ -42,7 +40,6 @@ async function fetchBookings(): Promise<Booking[]> {
       };
       const status = statusMap[booking.status] || booking.status.toLowerCase();
       
-      // Convert durationMinutes to hours
       const duration = booking.durationMinutes ? booking.durationMinutes / 60 : 0;
       
       return {
@@ -56,17 +53,12 @@ async function fetchBookings(): Promise<Booking[]> {
         startTime: booking.startTime,
         endTime: booking.endTime,
         powerKw: booking.powerKw || 0,
-        // Note: API doesn't return station object, we'll need to fetch it separately if needed
-        // For now, we'll use stationId to display
       };
     });
   } catch (error: any) {
-    // If it's a 401, the interceptor will handle logout
-    // For other errors, return empty array
     if (error.response?.status === 401) {
-      throw error; // Let the interceptor handle it
+      throw error;
     }
-    // For other errors (network, 500, etc), return empty array
     return [];
   }
 }
@@ -76,7 +68,7 @@ export default function BookingsPage() {
   const { data: bookings, isLoading, error } = useQuery({
     queryKey: ["bookings"],
     queryFn: fetchBookings,
-    retry: false, // Don't retry on error
+    retry: false,
   });
 
   const statusConfig = {
@@ -94,7 +86,6 @@ export default function BookingsPage() {
     );
   }
 
-  // Show error message if there's an error (but don't break the page)
   if (error && (error as any).response?.status !== 401) {
     return (
       <div className="space-y-6">

@@ -41,7 +41,6 @@ export function BookingModal({ open, onOpenChange, station }: BookingModalProps)
 
   const bookingMutation = useMutation({
     mutationFn: async (data: { stationId: string; duration: number; powerKw: number }) => {
-      // API expects startTime (ISO string) and powerKw, not duration
       const startTime = new Date().toISOString();
       const response = await apiClient.post("/bookings", {
         stationId: data.stationId,

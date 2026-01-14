@@ -21,17 +21,14 @@ interface ChargingStation {
 
 async function fetchStations(): Promise<ChargingStation[]> {
   const response = await apiClient.get("/stations");
-  // Map API response to our interface
   return (response.data || []).map((station: any) => {
-    // Calculate price per hour based on power (e.g., $0.50 per kW per hour)
     const basePricePerKw = 0.5;
     const powerKw = station.powerKw ?? 0;
     const pricePerHour = powerKw * basePricePerKw;
     
-    // Map isAvailable boolean to status string
     const status = station.isAvailable 
       ? "available" 
-      : "occupied"; // If not available, consider it occupied
+      : "occupied";
     
     return {
       id: station.id,

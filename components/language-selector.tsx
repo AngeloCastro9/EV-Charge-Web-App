@@ -14,10 +14,7 @@ export function LanguageSelector() {
   const router = useRouter();
 
   const changeLanguage = (newLocale: string) => {
-    // Set cookie
     document.cookie = `locale=${newLocale}; path=/; max-age=31536000`;
-    
-    // Reload page to apply new locale (URL stays the same)
     router.refresh();
     window.location.reload();
   };
